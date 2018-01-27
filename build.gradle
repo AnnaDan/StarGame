@@ -70,8 +70,22 @@ project(":core") {
 
 
     dependencies {
+        compile project(":engine")
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         
+    }
+}
+
+project(":engine") {
+    apply plugin: "java"
+
+
+    sourceCompatibility = 1.6
+    sourceSets.main.java.srcDirs = [ "src/" ]
+
+    dependencies {
+        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+
     }
 }
 
