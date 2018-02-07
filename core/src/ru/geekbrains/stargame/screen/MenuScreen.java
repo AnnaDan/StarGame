@@ -1,27 +1,37 @@
-package ru.geekbrains.stargame;
+package ru.geekbrains.stargame.screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Matrix3;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 
+import ru.geekbrains.stargame.Background;
+import ru.geekbrains.stargame.engine.ActionListener;
 import ru.geekbrains.stargame.engine.Base2DScreen;
-import ru.geekbrains.stargame.engine.Sprite;
 import ru.geekbrains.stargame.engine.math.Rect;
+import ru.geekbrains.stargame.engine.math.Rnd;
+import ru.geekbrains.stargame.star.Star;
+import ru.geekbrains.stargame.ui.ButtonExit;
+import ru.geekbrains.stargame.ui.ButtonPlay;
 
-public class MenuScreen extends Base2DScreen {
+public class MenuScreen extends Base2DScreen implements ActionListener {
+
+    private static final float BUTTON_HEIGHT = 0.15f;
+    private static final float BUTTON_PRESS_SCALE = 0.9f;
 
     private Texture backgroundTexture;
     private Background background;
-    private Texture exitTexture;
-    private Background exit;
-    private Texture playTexture;
-    private Background play;
+
+    private TextureAtlas atlas;
+
+    private ButtonExit buttonExit;
+    private ButtonPlay buttonPlay;
+
+    private static final int STARS_CNT = 100;
+    private Star stars[];
 
     public MenuScreen(Game game) {
         super(game);
@@ -32,24 +42,45 @@ public class MenuScreen extends Base2DScreen {
         super.show();
         backgroundTexture = new Texture("sky.jpg");
         background = new Background(new TextureRegion(backgroundTexture));
-        exitTexture = new Texture("close.png");
-        exit = new Background(new TextureRegion(backgroundTexture));
-        playTexture = new Texture("play_2.png");
-        play = new Background(new TextureRegion(backgroundTexture));
-        play.setHeightProportion(0.5f);
-        play.setScale(0.1f);
-         }
+
+        atlas = new TextureAtlas("menuAtlas.tpack");
+        buttonExit = new ButtonExit(atlas, BUTTON_PRESS_SCALE, this);
+        buttonExit.setHeightProportion(BUTTON_HEIGHT);
+        buttonPlay = new ButtonPlay(atlas, BUTTON_PRESS_SCALE, this);
+        buttonPlay.setHeightProportion(BUTTON_HEIGHT);
+        stars = new Star[STARS_CNT];
+        for (int i = 0; i < STARS_CNT ; i++) {
+            stars[i] = new Star(atlas, Rnd.nextFloat(-0.005f, 0.005f), Rnd.nextFloat(-0.5f, -0.1f), 0.01f);
+        }
+    }
 
     @Override
     public void render(float delta) {
         super.render(delta);
+        update(delta);
+        draw();
+    }
+
+    public void update(float delta) {
+
+        for (int i = 0; i <stars.length ; i++) {
+            stars[i].update(delta);
+        }
+
+    }
+
+    public void draw() {
         Gdx.gl.glClearColor(0.7f, 0.3f, 0.7f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
-        batch.draw(backgroundTexture, -1f, -1f, 2f, 2f);
-       // batch.draw(exitTexture, -0.3f, 0f,0.3f,0.3f );
-       // batch.draw(playTexture, 0f, 0f, 0.3f, 0.3f );
+        background.draw(batch);
+        for (int i = 0; i < stars.length ; i++) {
+            stars[i].draw(batch);
 
+        }
+
+        buttonExit.draw(batch);
+        buttonPlay.draw(batch);
         batch.end();
     }
 
@@ -57,20 +88,42 @@ public class MenuScreen extends Base2DScreen {
     protected void resize(Rect worldBounds) {
         super.resize(worldBounds);
         background.resize(worldBounds);
-        exit.resize(worldBounds);
-        play.resize(worldBounds);
+        for (int i = 0; i < stars.length; i++) {
+            stars[i].resize(worldBounds);
+        }
+        buttonExit.resize(worldBounds);
+        buttonPlay.resize(worldBounds);
     }
 
     @Override
     public void dispose() {
         backgroundTexture.dispose();
-        exitTexture.dispose();
-        playTexture.dispose();
+        atlas.dispose();
         super.dispose();
     }
 
     @Override
     protected void touchUp(Vector2 touch, int pointer) {
         super.touchUp(touch, pointer);
+        buttonExit.touchUp(touch, pointer);
+        buttonPlay.touchUp(touch, pointer);
+    }
+
+    @Override
+    protected void touchDown(Vector2 touch, int pointer) {
+        super.touchDown(touch, pointer);
+        buttonExit.touchDown(touch, pointer);
+        buttonPlay.touchDown(touch, pointer);
+    }
+
+    @Override
+    public void actionPerformed(Object src) {
+        if (src == buttonExit) {
+            Gdx.app.exit();
+        } else if (src == buttonPlay) {
+            game.setScreen(new GameScreen(game));
+        } else {
+            throw new RuntimeException("Unknown src " + src);
+        }
     }
 }

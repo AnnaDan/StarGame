@@ -1,8 +1,20 @@
 package ru.geekbrains.stargame.ui;
 
-/**
- * Created by annav on 07.02.2018.
- */
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
-public class ButtonExit {
+import ru.geekbrains.stargame.engine.ActionListener;
+import ru.geekbrains.stargame.engine.math.Rect;
+import ru.geekbrains.stargame.engine.ui.ScaledTouchUpButton;
+
+public class ButtonExit extends ScaledTouchUpButton {
+
+    public ButtonExit(TextureAtlas atlas, float pressScale, ActionListener actionListener) {
+        super(atlas.findRegion("btExit"), pressScale, actionListener);
+    }
+
+    @Override
+    public void resize(Rect worldBounds) {
+        setBottom(worldBounds.getBottom());
+        setRight(worldBounds.getRight());
+    }
 }

@@ -1,4 +1,4 @@
-package ru.geekbrains.engine.math;
+package ru.geekbrains.stargame.engine.math;
 
 
 import com.badlogic.gdx.math.Matrix3;
