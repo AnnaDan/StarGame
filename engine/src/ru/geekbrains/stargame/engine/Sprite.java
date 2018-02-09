@@ -4,6 +4,7 @@ package ru.geekbrains.stargame.engine;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import ru.geekbrains.stargame.engine.utils.Regions;
 
 import ru.geekbrains.stargame.engine.math.Rect;
 
@@ -13,6 +14,13 @@ public class Sprite extends Rect {
     protected float scale = 1f;
     protected TextureRegion[] regions;
     protected int frame;
+
+
+    protected boolean isDestroyed;
+
+    public Sprite(TextureRegion region, int rows, int cols, int frames) {
+        this.regions = Regions.split(region, rows, cols, frames);
+    }
 
     public Sprite(TextureRegion region) {
         if (region == null) {
@@ -79,5 +87,13 @@ public class Sprite extends Rect {
 
     public void setScale(float scale) {
         this.scale = scale;
+    }
+
+    public boolean isDestroyed() {
+        return isDestroyed;
+    }
+
+    public void setDestroyed(boolean destroyed) {
+        isDestroyed = destroyed;
     }
 }
