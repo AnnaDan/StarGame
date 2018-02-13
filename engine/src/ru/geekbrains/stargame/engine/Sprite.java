@@ -4,9 +4,9 @@ package ru.geekbrains.stargame.engine;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import ru.geekbrains.stargame.engine.utils.Regions;
 
 import ru.geekbrains.stargame.engine.math.Rect;
+import ru.geekbrains.stargame.engine.utils.Regions;
 
 public class Sprite extends Rect {
 
@@ -15,11 +15,10 @@ public class Sprite extends Rect {
     protected TextureRegion[] regions;
     protected int frame;
 
-
     protected boolean isDestroyed;
 
-    public Sprite(TextureRegion region, int rows, int cols, int frames) {
-        this.regions = Regions.split(region, rows, cols, frames);
+    public Sprite() {
+
     }
 
     public Sprite(TextureRegion region) {
@@ -28,6 +27,10 @@ public class Sprite extends Rect {
         }
         regions = new TextureRegion[1];
         regions[0] = region;
+    }
+
+    public Sprite(TextureRegion region, int rows, int cols, int frames) {
+        this.regions = Regions.split(region, rows, cols, frames);
     }
 
     public void draw(SpriteBatch batch) {

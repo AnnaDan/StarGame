@@ -10,7 +10,7 @@ import ru.geekbrains.stargame.engine.math.Rnd;
 
 public class Star extends Sprite {
 
-    private final Vector2 v = new Vector2();
+    protected final Vector2 v = new Vector2();
     private Rect worldBounds;
 
     public Star(TextureAtlas atlas, float vx, float vy, float height) {
