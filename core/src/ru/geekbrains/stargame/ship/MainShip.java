@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.stargame.bullet.BulletPool;
 import ru.geekbrains.stargame.engine.math.Rect;
+import ru.geekbrains.stargame.explosion.ExplosionPool;
 
 public class MainShip extends Ship {
 
@@ -20,33 +21,32 @@ public class MainShip extends Ship {
 
     private boolean pressedLeft;
     private boolean pressedRight;
-    private Sound sound;
+
 
 
     private int leftPointer = INVALID_POINTER;
     private int rightPointer = INVALID_POINTER;
 
 
-    public MainShip(TextureAtlas atlas, BulletPool bulletPool, Sound sound) {
-        super(atlas.findRegion("main_ship"), 1, 2, 2);
+    public MainShip(TextureAtlas atlas, BulletPool bulletPool, ExplosionPool explosionPool, Rect worldBounds, Sound laserSound) {
+        super(atlas.findRegion("main_ship"), 1, 2, 2, bulletPool, explosionPool, worldBounds, laserSound);
         setHeightProportion(SHIP_HEIGHT);
-        this.bulletPool = bulletPool;
         this.bulletRegion = atlas.findRegion("bulletMainShip");
         this.bulletHeight = 0.01f;
         this.bulletV.set(0, 0.5f);
         this.bulletDamage = 1;
         this.reloadInterval = 0.2f;
-        this.sound = sound;
+        this.hp = 10;
     }
 
     @Override
     public void update(float delta) {
+        super.update(delta);
         pos.mulAdd(v, delta);
         reloadTimer += delta;
         if (reloadTimer >= reloadInterval) {
             reloadTimer = 0f;
             shoot();
-            sound.play();
         }
         if (getRight() > worldBounds.getRight()) {
             setRight(worldBounds.getRight());
@@ -101,7 +101,6 @@ public class MainShip extends Ship {
                 break;
             case Input.Keys.UP:
                 shoot();
-                sound.play();
                 break;
         }
     }
@@ -130,6 +129,14 @@ public class MainShip extends Ship {
         }
     }
 
+    public boolean isBulletCollision(Rect bullet) {
+        return !(bullet.getRight() < getLeft()
+                || bullet.getLeft() > getRight()
+                || bullet.getBottom() > getTop()
+                || bullet.getTop() < pos.y
+        );
+    }
+
     private void moveRight() {
         v.set(v0);
     }
@@ -144,5 +151,19 @@ public class MainShip extends Ship {
 
     public Vector2 getV() {
         return v;
+    }
+
+    public void setHp(int bulletDam){
+        if ((this.hp - bulletDam)<0){
+            this.hp=0;
+            this.setDestroyed(true);
+        } else {
+            this.hp -= bulletDam;
+        }
+    }
+
+    public int getHp(){
+        return
+        this.hp;
     }
 }

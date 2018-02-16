@@ -1,40 +1,31 @@
 package ru.geekbrains.stargame.ship;
 
-import com.badlogic.gdx.Gdx;
+
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 import ru.geekbrains.stargame.bullet.BulletPool;
 import ru.geekbrains.stargame.engine.math.Rect;
 import ru.geekbrains.stargame.engine.pool.SpritesPool;
+import ru.geekbrains.stargame.explosion.ExplosionPool;
 
 public class EnemyPool extends SpritesPool<EnemyShip> {
 
-    private Sound sound;
-    TextureAtlas atlas;
-    BulletPool bulletPool;
-    protected Rect worldBounds; // границы мира
+    private final BulletPool bulletPool;
+    private final ExplosionPool explosionPool;
+    private final Rect worldBounds;
+    private final MainShip mainShip;
+    private final Sound bulletSound;
 
-    public void setWorldBounds(Rect worldBounds) {
+    public EnemyPool(BulletPool bulletPool, ExplosionPool explosionPool, Rect worldBounds, MainShip mainShip, Sound bulletSound) {
+        this.bulletPool = bulletPool;
+        this.explosionPool = explosionPool;
         this.worldBounds = worldBounds;
-    }
-
-    public EnemyPool() {
-        sound = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
-        atlas = new TextureAtlas("textures/mainAtlas.tpack");
-        bulletPool = new BulletPool();
+        this.mainShip = mainShip;
+        this.bulletSound = bulletSound;
     }
 
     @Override
     protected EnemyShip newObject() {
-        return new EnemyShip(atlas, bulletPool, sound,worldBounds);
+        return new EnemyShip(bulletPool, explosionPool, worldBounds, mainShip, bulletSound);
     }
-
-
-/*
-    @Override
-    protected void debugLog() {
-        System.out.println("BulletPool change active/free:" + activeObjects.size() + "/" + freeObjects.size());
-    }
-*/
 }

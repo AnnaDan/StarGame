@@ -6,10 +6,8 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.stargame.engine.Sprite;
 
-
 public class Explosion extends Sprite {
 
-    protected final Vector2 v = new Vector2();
     private Sound sound;
     private float animateInterval = 0.017f; //время между кадрами анимации
     private float animateTimer;
