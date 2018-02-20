@@ -83,17 +83,4 @@ public class EnemyShip extends Ship {
                 || bullet.getTop() < pos.y
         );
     }
-    public void setHp(int bulletDam){
-        if ((this.hp - bulletDam)<0){
-            this.hp=0;
-            this.setDestroyed(true);
-        } else {
-            this.hp -= bulletDam;
-        }
-    }
-
-    public int getHp(){
-        return this.hp;
-    }
-
 }

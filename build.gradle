@@ -8,7 +8,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.0'
+        classpath 'com.android.tools.build:gradle:2.3.0'
         
 
     }
@@ -18,7 +18,7 @@ allprojects {
     apply plugin: "eclipse"
     apply plugin: "idea"
 
-    version = '1.0'
+    version = '1.1'
     ext {
         appName = "stargame"
         gdxVersion = '1.9.7'

@@ -1,5 +1,6 @@
 package ru.geekbrains.stargame;
 
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -13,7 +14,7 @@ public class StarGame extends ApplicationAdapter {
 	Texture background;
 	Texture img;
 	TextureRegion region;
-	
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
@@ -62,7 +63,7 @@ public class StarGame extends ApplicationAdapter {
 		batch.draw(background, 0, 0);
 		batch.end();
 	}
-	
+
 	@Override
 	public void dispose () {
 		batch.dispose();
